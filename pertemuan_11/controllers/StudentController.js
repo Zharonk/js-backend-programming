@@ -32,35 +32,62 @@ class StudentController{
         res.status(201).json(data);
     }
 
-    update(req, res){
+    async show(req, res) {
+        const { id } = req.params;
+    
+        // cari student berdasarkan id
+        const students = await Student.find(id);
+    
+        if (students) {
+          const data = {
+            data: true,
+            message: `Menampilkan detail students`,
+            data: students,
+          };
+          res.status(200).json(data);
+        }
+        const gagal = {
+          message: `Student dengan id ${id} not found`,
+        };
+    
+        res.status(404).json(gagal);
+      }
+
+    async update(req, res){
         const {id} = req.params; // di destructing
-        const {nama} = req.body;
-
-        // TODO 6: Update data students
-        students[id] = nama;
-
-        const data = {
-            message : `Mengedit data students id : ${id}, nama : ${nama}`,
+        // const {nama} = req.body;
+        const students = await Student.find(id);
+        if (students) {
+            const students = await Student.update(id, req.body);
+            const data = {
+            message : `Mengedit data students id : ${id}`,
             data : students
         };
-
         // res.json("Mengedit data Students" + id);
-        res.json(data);
+        res.status(200).json(data);
+    } const gagal = {
+        message: `Students dengan id ${id} not found`,
+      };
+  
+      res.status(404).json(gagal);
+
     }
 
-    destroy(req, res){
+    async destroy(req, res){
         const {id} = req.params; // di destructing
-
-        // TODO 7: Hapus data students
-        students.splice(id, 1);
-
-        const data = {
-            message : `Menghapus data students ${id}`,
-            data : students
-        };
-
-        // res.json("Menghapus data Students" + id);
-        res.json(data);
+        const students = await Student.find(id);
+        
+        if (students) {
+            await Student.delete(id);
+            const data = {
+                message : `Menghapus data students ${id}`,
+                data : students
+            };
+            res.status(200).json(data);
+        }const gagal = {
+            message: `Student dengan id ${id} not found`,
+          };
+          res.status(404).json(gagal);
     }
     
 }
