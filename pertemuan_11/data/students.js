@@ -2,4 +2,4 @@
 const students = ["Zharonk", "Achmad", "Izhar"];
 
 // TODO 2: export data students
-module.exports = students;
+// module.exports = students;
